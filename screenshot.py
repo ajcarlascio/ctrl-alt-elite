@@ -9,8 +9,8 @@ import boto3
  
 #def lambda_handler(file_name, bucket, object_name=None):
 
-ACCESS_KEY = 'AKIATNXFI3X6Q6ATU7O6'
-SECRET_KEY = '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'
+ACCESS_KEY = 'XXXXX'
+SECRET_KEY = 'XXXXX'
 
 # using selenium headlessly
 options = Options()
