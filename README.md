@@ -1,4 +1,5 @@
 # ctrl-alt-elite
+
 407 ETR hackathon
 
 homebrew install chromedriver --cask
@@ -12,6 +13,7 @@ pip install selenium webdriver-manager
 pip install Pillow
 
 cd to folder
+
 
 
 
