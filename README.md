@@ -12,6 +12,8 @@ pip install selenium webdriver-manager
 
 pip install Pillow
 
+pip install python-dotenv
+
 cd to folder
 
 

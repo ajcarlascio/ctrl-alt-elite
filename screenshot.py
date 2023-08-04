@@ -6,43 +6,52 @@ from PIL import Image
 import datetime
 import time
 import boto3
- 
-#def lambda_handler(file_name, bucket, object_name=None):
+import os
+from dotenv import load_dotenv
 
-ACCESS_KEY = 'XXXXX'
-SECRET_KEY = 'XXXXX'
-
-# using selenium headlessly
+#create loop to simulate automation
 options = Options()
 options.headless = True
-s3 = boto3.client('s3', aws_access_key_id=ACCESS_KEY, aws_secret_access_key=SECRET_KEY)
+load_dotenv()
+
+access = os.getenv("ACCESS_KEY")
+secret = os.getenv("SECRET_KEY")
+s3 = boto3.client('s3', aws_access_key_id=access, aws_secret_access_key=secret)
 
 # installing chrome driver
 driver = webdriver.Chrome(options=options)
 actions = ActionChains(driver)
-x = str(datetime.datetime.now())
-
-# getting the url and saving the screenshot
 driver.get('https://www.youtube.com/watch?v=VjvqGR3wsIs&ab_channel=VisitLaramie')
-nav = driver.find_element(By.ID,'title')
-driver.find_element(By.ID,'container').click()
-actions.move_to_element_with_offset(nav, 0, 0)
-time.sleep(5)
-driver.save_screenshot(x +' screenshot.png')
 
-pngOpen = x +' screenshot.png'
 
-(left, upper, right, lower) = (120, 180, 1480, 919)
-pngOpen = Image.open(x +' screenshot.png')
-pngOpen = pngOpen.crop((left, upper, right, lower))
-pngOpen.save(x +' screenshot.png')
+for i in range(10):
+    if i > 0:
+            time.sleep(10)
 
-s3.upload_file(
-     Filename="/Users/acarlasc/Projects/ctrl-alt-elite/"+ x +" screenshot.png",
-     Bucket="ctrl-alt-elite",
-     Key= x +" screenshot.png"
- )
+    x = str(datetime.datetime.now())
 
+    # getting the url and saving the screenshot
+    nav = driver.find_element(By.ID,'title')
+    driver.find_element(By.ID,'container').click()
+    actions.move_to_element_with_offset(nav, 0, 0)
+    time.sleep(5)
+    driver.save_screenshot(x +' screenshot.png')
+    pngOpen = x +' screenshot.png'
+
+    (left, upper, right, lower) = (120, 180, 1480, 919)
+    pngOpen = Image.open(x +' screenshot.png')
+    pngOpen = pngOpen.crop((left, upper, right, lower))
+    jpgConvert = pngOpen.convert("RGB")
+    jpgConvert.save(x +' screenshot.jpg')
+
+    s3.upload_file(
+        Filename="/Users/acarlasc/Projects/ctrl-alt-elite/"+ x +" screenshot.jpg",
+        Bucket="ctrl-alt-elite-screenshots",
+        Key= x +" screenshot.jpg"
+    )
+
+    os.remove('/Users/acarlasc/Projects/ctrl-alt-elite/' + x + ' screenshot.png')
+    os.remove('/Users/acarlasc/Projects/ctrl-alt-elite/' + x + ' screenshot.jpg')
 # closing driver
 time.sleep(1)
 driver.quit()
