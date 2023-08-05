@@ -21,16 +21,13 @@ s3 = boto3.client('s3', aws_access_key_id=access, aws_secret_access_key=secret)
 # installing chrome driver
 driver = webdriver.Chrome(options=options)
 actions = ActionChains(driver)
-driver.get('https://www.youtube.com/watch?v=VjvqGR3wsIs&ab_channel=VisitLaramie')
-
 
 for i in range(10):
-    if i > 0:
-            time.sleep(10)
-
+            
     x = str(datetime.datetime.now())
 
     # getting the url and saving the screenshot
+    driver.get('https://www.youtube.com/watch?v=VjvqGR3wsIs&ab_channel=VisitLaramie')
     nav = driver.find_element(By.ID,'title')
     driver.find_element(By.ID,'container').click()
     actions.move_to_element_with_offset(nav, 0, 0)
@@ -47,11 +44,13 @@ for i in range(10):
     s3.upload_file(
         Filename="/Users/acarlasc/Projects/ctrl-alt-elite/"+ x +" screenshot.jpg",
         Bucket="ctrl-alt-elite-screenshots",
-        Key= x +" screenshot.jpg"
+        Key= x +" screenshot.jpg",
+        ExtraArgs={'ContentType': 'image/jpg'}
     )
 
     os.remove('/Users/acarlasc/Projects/ctrl-alt-elite/' + x + ' screenshot.png')
     os.remove('/Users/acarlasc/Projects/ctrl-alt-elite/' + x + ' screenshot.jpg')
+    time.sleep(10)
 # closing driver
 time.sleep(1)
-driver.quit()
+#driver.quit()
